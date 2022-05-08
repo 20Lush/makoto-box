@@ -8,10 +8,10 @@
 //- variables in the game as well as physical stimuli. this would be more to the job of a NN or something
 //- that is less predictable than a fixed % error rate.
 
-const char TARGET_BUTTON_TRAVERSE = 10; //10ms
+const char TARGET_BUTTON_TRAVERSE = 8; //10ms
 const char ERROR_BUTTON_TRAVERSE = 2; //2% deviation set
-const char TARGET_PRESS_LENGTH = 40; //50ms
-const char ERROR_PRESS_LENGTH = 5; //5% deviation set
+const char TARGET_PRESS_LENGTH = 4; //50ms
+const char ERROR_PRESS_LENGTH = 2; //5% deviation set
 
 int roll(int min, int max){ //take a random value from between bounds min and max
 

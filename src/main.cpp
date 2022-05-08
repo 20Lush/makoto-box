@@ -4,14 +4,34 @@
 
 void karakusaCombo(char direction){
 
+  const int animationBuffer = 2500; //2.5s
+  const int step = 5;
+
   hc(invertedDirection(direction)); //half circle back
   pressButton(btnPins[6]); //HK
-  delay(2500);
-  // //possible short delay here due to needing to time the kara correctly
+
+  for(int time = 0; time < animationBuffer/step; time++){ //every [step] in the buffer the arduino will check the status of pin 2 and 3. if your press the input buttons again it will stop the macro
+    
+    if(buttonIsPressed(inputPins[2] || buttonIsPressed(inputPins[3])))
+      return;
+
+    delay(step);
+  }
+
   pressButton(btnPins[2]); //HP
-  delay(buttonTraverseTime()+10);
+  delay(buttonTraverseTime()+10); //10ms+fuzzy buffer to allow for HP to fully go through before EX-Hayate
   qc(direction); //quarter circle forward
-  pressDoubleButton(btnPins[1], btnPins[2]); //two punch buttons. index dependant on key binds in game, so extra headache there
+  pressDoubleButton(btnPins[1], btnPins[2]);
+
+}
+
+//supers?
+
+void IIsuper(char direction){
+
+  qc(direction);
+  qc(direction);
+  pressButton(btnPins[5]);
 
 }
 
@@ -28,11 +48,17 @@ void loop() {
   //continuously seed rng? how resource intensive might that be? will it make a difference?
   //a more advanced humanization engine might need real time calculation - much to think about
 
-  if(buttonIsPressed(INPUT_BUTTON_ID_1)) //these bare button ID's are not viable i need to figure something out, probably add them to the btnPin array
+  if(buttonIsPressed(inputPins[2]))
     karakusaCombo(left);
   
-  else if(buttonIsPressed(INPUT_BUTTON_ID_2))
+  else if(buttonIsPressed(inputPins[3]))
     karakusaCombo(right);
+
+  if(buttonIsPressed(inputPins[0]))
+    IIsuper(left);
+  
+  else if(buttonIsPressed(inputPins[1]))
+    IIsuper(right);
   
 }
 

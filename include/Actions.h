@@ -14,7 +14,7 @@ void hc(char direction){ //half circle that terminates in the direction that is 
     delay(pressLength()); //1 or 3              //if your move buttons/stick returns to neutral (5). pressButton has that return built in, which
     releaseButton(down);                        //is good for ability registering, but the exact opposite of what I need for movement inputs
     delay(pressLength()); //4 or 6              //I basically needed to bleed movement inputs into each other in order to get proper inputs.
-    releaseButton(direction);                   //What I need is a function that has this bleed-in built in, but cleans up the garbage inputs
+    releaseButton(direction);                   //What I need is a function that has this bleed-in bult in, but cleans up the garbage inputs
     delay(pressLength());                       //that get left over during that operation. I need a ghost hand handling my virtual stick :)
 
 

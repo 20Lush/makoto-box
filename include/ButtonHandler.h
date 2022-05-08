@@ -1,11 +1,11 @@
 #include "Latency.h" //look here for pressLength()
 
 
-//     11 12 13  ------------- 8 19 10
+//     11 12 13  ------------- 8 0i 1i
 //   ____________________________________
 //  |                                    |
-//  |   left  down          0  1  2  3   |
-//  |             right      4  5  6  7  |
+//  |   left  down          0  1  2  2i  |
+//  |             right      4  5  6  3i |
 //  |        up                          |
 //  |                                    |
 //  |____________________________________|
@@ -19,10 +19,9 @@ const char up = A3;
 const char right = A1;
 const char left = A0;
 
-const uint8_t INPUT_BUTTON_ID_1 = 0;
-const uint8_t INPUT_BUTTON_ID_2 = 1;
+char inputPins[] = {0, 1, 15, 4};
 
-char btnPins[] = {10, 7, 16, 15, 5, 3, 6, 4}; 
+char btnPins[] = {10, 7, 16, 5, 3, 6}; 
 
 char movementPins[] = {up, down, left, right};
 
@@ -38,8 +37,8 @@ void initializeButtons(void){ //arduino pin settings and setting all btns HIGH
     digitalWrite(btnPins[i], HIGH);
   }
 
-  pinMode(INPUT_BUTTON_ID_1, INPUT_PULLUP);
-  pinMode(INPUT_BUTTON_ID_2, INPUT_PULLUP);
+  for(unsigned int i = 0; i<sizeof(inputPins); i++)
+    pinMode(inputPins[i], INPUT_PULLUP);
 
 }
 
@@ -127,7 +126,7 @@ bool buttonIsPressed(char button){
 
   if(digitalRead(button))
     return false; //this is because the harness i created to hijack the buttons leads to an inverted pull-down style input from the perspective of the arduino
-  else if(!(digitalRead(button)))
+  else if(!digitalRead(button))
     return true; //this inversion just makes things a little bit easier to deal with when creating macros on the fly from main.cpp
   else
     return false; //fail-open state. if there is some sort of messup in the circuit the arduino will keep the virtual switch open(thus no logic executed)
