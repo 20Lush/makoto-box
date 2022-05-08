@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <Arduino.h>
 
 //This is a standard use library for the cheatbox that uses randomness to devate around a target value
 //This is a precaution in the case that the game will pick up on perfect button inputs.
@@ -10,12 +10,12 @@
 
 const char TARGET_BUTTON_TRAVERSE = 10; //10ms
 const char ERROR_BUTTON_TRAVERSE = 2; //2% deviation set
-const char TARGET_PRESS_LENGTH = 50; //50ms
+const char TARGET_PRESS_LENGTH = 40; //50ms
 const char ERROR_PRESS_LENGTH = 5; //5% deviation set
 
 int roll(int min, int max){ //take a random value from between bounds min and max
 
-  int output = min + (rand() % static_cast<int>(max - min + 1)); //stolen from stackoverflow kekw
+  int output = min + (random() % static_cast<int>(max - min + 1)); //stolen from stackoverflow kekw
   return output;
 
 }

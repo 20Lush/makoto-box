@@ -1,12 +1,11 @@
 #include "Latency.h" //look here for pressLength()
-#include <Arduino.h>
 
 
-//     9 10 11  ------------- 12 13 14
+//     11 12 13  ------------- 8 19 10
 //   ____________________________________
 //  |                                    |
-//  |   left  down          1  2  3  4   |
-//  |             right      5  6  7  8  |
+//  |   left  down          0  1  2  3   |
+//  |             right      4  5  6  7  |
 //  |        up                          |
 //  |                                    |
 //  |____________________________________|
@@ -15,12 +14,16 @@
 
 //arduin pin ID's VVVVVVV
 //movement buttons. declared explicitly so I can use them later as movement "vectors"
-const char down = 2;
-const char up = 15;
-const char right = 16;
-const char left = 10;
+const char down = A2;
+const char up = A3;
+const char right = A1;
+const char left = A0;
 
-char btnPins[14] = {}; //fill out the pin assignments for this. future me problem
+const uint8_t INPUT_BUTTON_ID_1 = 0;
+const uint8_t INPUT_BUTTON_ID_2 = 1;
+
+char btnPins[] = {10, 7, 16, 15, 5, 3, 6, 4}; 
+
 char movementPins[] = {up, down, left, right};
 
 void initializeButtons(void){ //arduino pin settings and setting all btns HIGH
@@ -34,6 +37,9 @@ void initializeButtons(void){ //arduino pin settings and setting all btns HIGH
     pinMode(btnPins[i], OUTPUT);
     digitalWrite(btnPins[i], HIGH);
   }
+
+  pinMode(INPUT_BUTTON_ID_1, INPUT_PULLUP);
+  pinMode(INPUT_BUTTON_ID_2, INPUT_PULLUP);
 
 }
 
@@ -73,6 +79,34 @@ void pressDoubleButton(char button1, char button2){ //generic trivial button pre
 
 }
 
+void holdButton(char button, int length = 0){
+
+  digitalWrite(button, 0);
+  if(length > 0){
+    delay(length);
+    digitalWrite(button, 1);
+  }
+    
+}
+
+void holdDoubleButton(char button1, char button2, int length = 0){
+
+  digitalWrite(button1, 0);
+  digitalWrite(button2, 0);
+  if(length > 0){
+    delay(length);
+    digitalWrite(button1, 1);
+    digitalWrite(button2, 1);
+  }
+
+}
+
+void releaseButton(char button){
+
+  digitalWrite(button, 1);
+
+}
+
 char invertedDirection(char direction){ //idk how to do this without verbose conditional statements. shouts out to the compiler
 
   if(direction == up)
@@ -87,4 +121,15 @@ char invertedDirection(char direction){ //idk how to do this without verbose con
 
   else
     return 0; //i have no clue if this is going to fuck something up
+}
+
+bool buttonIsPressed(char button){
+
+  if(digitalRead(button))
+    return false; //this is because the harness i created to hijack the buttons leads to an inverted pull-down style input from the perspective of the arduino
+  else if(!(digitalRead(button)))
+    return true; //this inversion just makes things a little bit easier to deal with when creating macros on the fly from main.cpp
+  else
+    return false; //fail-open state. if there is some sort of messup in the circuit the arduino will keep the virtual switch open(thus no logic executed)
+                  //THEORETICALLY
 }
