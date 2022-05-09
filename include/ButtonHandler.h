@@ -19,7 +19,9 @@ const char up = A3;
 const char right = A1;
 const char left = A0;
 
-char inputPins[] = {0, 1, 15, 4};
+char inputPins[] = {0, 1, 15, 4}; 
+
+char statusSwitch = 8; //placeholder pin value
 
 char btnPins[] = {10, 7, 16, 5, 3, 6}; 
 
@@ -39,7 +41,8 @@ void initializeButtons(void){ //arduino pin settings and setting all btns HIGH
 
   for(unsigned int i = 0; i<sizeof(inputPins); i++)
     pinMode(inputPins[i], INPUT_PULLUP);
-
+  
+  pinMode(statusSwitch, INPUT); // has its own pullup resistors
 }
 
 void pressButton(char button){ //generic trivial button press function. Presses an button!
@@ -131,4 +134,13 @@ bool buttonIsPressed(char button){
   else
     return false; //fail-open state. if there is some sort of messup in the circuit the arduino will keep the virtual switch open(thus no logic executed)
                   //THEORETICALLY
+}
+
+bool status(void){
+
+  if(digitalRead(statusSwitch))
+    return true;
+  else
+    return false;
+
 }

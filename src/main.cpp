@@ -1,20 +1,14 @@
 #include "Actions.h"
 
-//some moves
-
-void karakusaCombo(char direction){
+// 3rd STRIKE  -----------------------------------------------
+void karakusa(char direction){
 
   hc(invertedDirection(direction)); //half circle back
   pressButton(btnPins[5]); //HK
   delay(300);
-  // pressButton(btnPins[2]); //HP
-  // delay(buttonTraverseTime()+10); //10ms+fuzzy buffer to allow for HP to fully go through before EX-Hayate
-  // qc(direction); //quarter circle forward
-  // pressDoubleButton(btnPins[1], btnPins[2]);
 
 }
 
-//supers?
 
 void IIsuper(char direction){
 
@@ -23,6 +17,19 @@ void IIsuper(char direction){
   pressButton(btnPins[5]);
 
 }
+//----------------------------------------------------------------
+
+// STRIVE --------------------------------------------------------
+
+void parry(char direction){
+
+  hc(invertedDirection(direction), true); //the true flag here just means it follows strive's half circle format (terminates forward)
+  pressButton(btnPins[3]); //or is it 2 kekwait
+  delay(30);
+
+}
+
+//----------------------------------------------------------------
 
 
 void setup() {
@@ -37,17 +44,33 @@ void loop() {
   //continuously seed rng? how resource intensive might that be? will it make a difference?
   //a more advanced humanization engine might need real time calculation - much to think about
 
-  if(buttonIsPressed(inputPins[2]))
-    karakusaCombo(left);
-  
-  else if(buttonIsPressed(inputPins[3]))
-    karakusaCombo(right);
 
-  if(buttonIsPressed(inputPins[0]))
-    IIsuper(left);
+  if(status()){
+
+    if(buttonIsPressed(inputPins[0]))
+      parry(left);
+    else if(buttonIsPressed(inputPins[1]))
+      parry(right);
+
+  }
+
+  else if(!status()){
+
+    if(buttonIsPressed(inputPins[2]))
+      karakusa(left);
   
-  else if(buttonIsPressed(inputPins[1]))
-    IIsuper(right);
+    else if(buttonIsPressed(inputPins[3]))
+      karakusa(right);
+
+    if(buttonIsPressed(inputPins[0]))
+      IIsuper(left);
+  
+    else if(buttonIsPressed(inputPins[1]))
+      IIsuper(right);
+
+  }
+
+
   
 }
 
